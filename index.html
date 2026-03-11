@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>System Scan</title>
+<title>System Security Scan</title>
 
 <style>
 
@@ -43,7 +43,16 @@ display:none;
 text-align:center;
 font-size:32px;
 color:red;
+margin-top:20px;
 animation:glitch 0.4s infinite;
+}
+
+#lesson{
+display:none;
+text-align:center;
+font-size:24px;
+margin-top:20px;
+color:white;
 }
 
 @keyframes glitch{
@@ -52,6 +61,29 @@ animation:glitch 0.4s infinite;
 50%{transform:translate(-3px,1px)}
 75%{transform:translate(3px,-1px)}
 100%{transform:translate(1px,-2px)}
+}
+
+.flash{
+animation:flash 0.3s 6;
+}
+
+@keyframes flash{
+0%{background:black;}
+50%{background:red;}
+100%{background:black;}
+}
+
+.shake{
+animation:shake 0.3s;
+animation-iteration-count:4;
+}
+
+@keyframes shake{
+0%{transform:translate(2px,2px)}
+25%{transform:translate(-2px,2px)}
+50%{transform:translate(-2px,-2px)}
+75%{transform:translate(2px,-2px)}
+100%{transform:translate(2px,2px)}
 }
 
 </style>
@@ -68,10 +100,13 @@ animation:glitch 0.4s infinite;
 </div>
 
 <div id="warning">
-⚠ CYBER SECURITY WARNING ⚠<br><br>
-Lo BSDK 😅<br>
-Random links open madi login madbedi!<br><br>
-This was a cybersecurity awareness demo.
+⚠ SECURITY BREACH DETECTED ⚠
+</div>
+
+<div id="lesson">
+😅 Relax!<br><br>
+This was only a cybersecurity awareness demo.<br>
+Never open random links or login pages.
 </div>
 
 <audio id="alarm">
@@ -79,6 +114,16 @@ This was a cybersecurity awareness demo.
 </audio>
 
 <script>
+
+/* FULLSCREEN ON TAP */
+
+function goFullscreen(){
+if(document.documentElement.requestFullscreen){
+document.documentElement.requestFullscreen();
+}
+}
+document.body.addEventListener("click",goFullscreen);
+
 
 /* MATRIX BACKGROUND */
 
@@ -122,18 +167,32 @@ drops[i]++;
 setInterval(draw,33);
 
 
-/* TERMINAL TEXT */
+/* TERMINAL SCAN */
 
 let terminal=document.getElementById("terminal");
 
+let battery=Math.floor(Math.random()*100);
+
 let lines=[
-"Initializing system scan...",
-"Connecting to network...",
-"Analyzing device security...",
-"Checking suspicious links...",
+
+"root@system:~$ initializing security scan...",
+"root@system:~$ connecting to remote node...",
+"root@system:~$ detecting IP address...",
 "IP detected: 192.168."+Math.floor(Math.random()*200)+"."+Math.floor(Math.random()*200),
-"Scanning browser behavior...",
-"Security risk detected..."
+"root@system:~$ scanning network ports...",
+"root@system:~$ bypassing firewall...",
+"root@system:~$ checking suspicious links...",
+"Battery level detected: "+battery+"%",
+"root@system:~$ accessing camera module...",
+"root@system:~$ scanning contacts database...",
+"Contacts detected: "+Math.floor(Math.random()*300),
+"root@system:~$ extracting data packets...",
+"root@system:~$ analyzing browser activity...",
+"root@system:~$ tracking device location...",
+"Location detected: Bengaluru, India",
+"root@system:~$ injecting payload...",
+"root@system:~$ system vulnerability found..."
+
 ];
 
 let i=0;
@@ -146,13 +205,34 @@ terminal.innerHTML+="> "+lines[i]+"<br>";
 
 i++;
 
-setTimeout(typeLine,1000);
+setTimeout(typeLine,900);
 
 }
 
 }
 
 typeLine();
+
+
+/* COUNTDOWN */
+
+let count=5;
+
+function countdown(){
+
+if(count>0){
+
+terminal.innerHTML+="> initiating breach in "+count+"...<br>";
+
+count--;
+
+setTimeout(countdown,1000);
+
+}
+
+}
+
+setTimeout(countdown,5000);
 
 
 /* PROGRESS BAR */
@@ -170,15 +250,22 @@ if(progress>=100){
 
 clearInterval(interval);
 
+document.body.classList.add("flash");
+document.body.classList.add("shake");
+
 document.getElementById("warning").style.display="block";
 
 document.getElementById("alarm").play();
 
-/* phone vibration */
-
 if(navigator.vibrate){
-navigator.vibrate([300,200,300,200,300]);
+navigator.vibrate([300,200,300,200,500]);
 }
+
+setTimeout(function(){
+
+document.getElementById("lesson").style.display="block";
+
+},4000);
 
 }
 
