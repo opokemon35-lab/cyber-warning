@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>System Security Scan</title>
+<title>Cyber Security Scan</title>
 
 <style>
 
@@ -17,12 +17,54 @@ canvas{
 position:fixed;
 top:0;
 left:0;
+z-index:-2;
+}
+
+#grid{
+position:fixed;
+width:100%;
+height:100%;
+background-image:
+linear-gradient(rgba(0,255,0,0.1) 1px, transparent 1px),
+linear-gradient(90deg, rgba(0,255,0,0.1) 1px, transparent 1px);
+background-size:40px 40px;
 z-index:-1;
 }
 
 #terminal{
 padding:20px;
-font-size:18px;
+font-size:17px;
+max-height:60vh;
+overflow:auto;
+}
+
+#command{
+background:black;
+color:#00ff00;
+border:none;
+font-family:monospace;
+font-size:17px;
+outline:none;
+}
+
+#globe{
+position:fixed;
+right:20px;
+top:20px;
+font-size:80px;
+animation:spin 6s linear infinite;
+}
+
+@keyframes spin{
+from{transform:rotate(0deg)}
+to{transform:rotate(360deg)}
+}
+
+#packets{
+position:fixed;
+right:20px;
+top:120px;
+font-size:16px;
 }
 
 #progressBox{
@@ -44,23 +86,27 @@ text-align:center;
 font-size:32px;
 color:red;
 margin-top:20px;
-animation:glitch 0.4s infinite;
 }
 
 #lesson{
 display:none;
 text-align:center;
 font-size:24px;
-margin-top:20px;
 color:white;
+margin-top:20px;
 }
 
-@keyframes glitch{
-0%{transform:translate(1px,1px)}
-25%{transform:translate(-1px,2px)}
-50%{transform:translate(-3px,1px)}
-75%{transform:translate(3px,-1px)}
-100%{transform:translate(1px,-2px)}
+#skull{
+display:none;
+text-align:center;
+font-size:90px;
+animation:pulse 1s infinite;
+}
+
+@keyframes pulse{
+0%{transform:scale(1)}
+50%{transform:scale(1.2)}
+100%{transform:scale(1)}
 }
 
 .flash{
@@ -68,22 +114,9 @@ animation:flash 0.3s 6;
 }
 
 @keyframes flash{
-0%{background:black;}
-50%{background:red;}
-100%{background:black;}
-}
-
-.shake{
-animation:shake 0.3s;
-animation-iteration-count:4;
-}
-
-@keyframes shake{
-0%{transform:translate(2px,2px)}
-25%{transform:translate(-2px,2px)}
-50%{transform:translate(-2px,-2px)}
-75%{transform:translate(2px,-2px)}
-100%{transform:translate(2px,2px)}
+0%{background:black}
+50%{background:red}
+100%{background:black}
 }
 
 </style>
@@ -91,41 +124,39 @@ animation-iteration-count:4;
 
 <body>
 
+<div id="grid"></div>
+
 <canvas id="matrix"></canvas>
 
+<div id="globe">🌍</div>
+
+<div id="packets">
+Packets: <span id="packetCount">0</span>
+</div>
+
 <div id="terminal"></div>
+
+<div style="padding:20px">
+> <input id="command" placeholder="type command...">
+</div>
 
 <div id="progressBox">
 <div id="progressBar"></div>
 </div>
 
-<div id="warning">
-⚠ SECURITY BREACH DETECTED ⚠
-</div>
+<div id="skull">☠</div>
+
+<div id="warning">⚠ SECURITY BREACH DETECTED ⚠</div>
 
 <div id="lesson">
 😅 Relax!<br><br>
-This was only a cybersecurity awareness demo.<br>
-Never open random links or login pages.
+This was a cybersecurity awareness demo.<br>
+Never open unknown links.
 </div>
-
-<audio id="alarm">
-<source src="https://www.soundjay.com/button/beep-07.wav" type="audio/wav">
-</audio>
 
 <script>
 
-/* FULLSCREEN ON TAP */
-
-function goFullscreen(){
-if(document.documentElement.requestFullscreen){
-document.documentElement.requestFullscreen();
-}
-}
-document.body.addEventListener("click",goFullscreen);
-
-
-/* MATRIX BACKGROUND */
+/* MATRIX RAIN */
 
 let canvas=document.getElementById("matrix");
 let ctx=canvas.getContext("2d");
@@ -167,72 +198,116 @@ drops[i]++;
 setInterval(draw,33);
 
 
-/* TERMINAL SCAN */
+/* TERMINAL */
 
 let terminal=document.getElementById("terminal");
 
-let battery=Math.floor(Math.random()*100);
+function log(text){
+terminal.innerHTML+="<br>> "+text;
+terminal.scrollTop=terminal.scrollHeight;
+}
 
-let lines=[
+let boot=[
 
-"root@system:~$ initializing security scan...",
-"root@system:~$ connecting to remote node...",
-"root@system:~$ detecting IP address...",
-"IP detected: 192.168."+Math.floor(Math.random()*200)+"."+Math.floor(Math.random()*200),
-"root@system:~$ scanning network ports...",
-"root@system:~$ bypassing firewall...",
-"root@system:~$ checking suspicious links...",
-"Battery level detected: "+battery+"%",
-"root@system:~$ accessing camera module...",
-"root@system:~$ scanning contacts database...",
-"Contacts detected: "+Math.floor(Math.random()*300),
-"root@system:~$ extracting data packets...",
-"root@system:~$ analyzing browser activity...",
-"root@system:~$ tracking device location...",
-"Location detected: Bengaluru, India",
-"root@system:~$ injecting payload...",
-"root@system:~$ system vulnerability found..."
+"Initializing cyber scan...",
+"Connecting to node...",
+"Detecting IP...",
+"IP: 192.168."+Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255),
+"Scanning network ports...",
+"Accessing system modules...",
+"Injecting scanner...",
+"Starting password brute force..."
 
 ];
 
 let i=0;
 
-function typeLine(){
+function bootSeq(){
 
-if(i<lines.length){
+if(i<boot.length){
 
-terminal.innerHTML+="> "+lines[i]+"<br>";
-
+log(boot[i]);
 i++;
 
-setTimeout(typeLine,900);
+setTimeout(bootSeq,900);
 
 }
 
 }
 
-typeLine();
+bootSeq();
 
 
-/* COUNTDOWN */
+/* PASSWORD CRACK */
 
-let count=5;
+let crack=0;
 
-function countdown(){
+function crackPass(){
 
-if(count>0){
+if(crack<100){
 
-terminal.innerHTML+="> initiating breach in "+count+"...<br>";
+log("Cracking password "+crack+"%");
+crack+=10;
 
-count--;
-
-setTimeout(countdown,1000);
-
-}
+setTimeout(crackPass,600);
 
 }
 
-setTimeout(countdown,5000);
+}
+
+setTimeout(crackPass,6000);
+
+
+/* NETWORK PACKETS */
+
+let packets=0;
+
+setInterval(function(){
+
+packets+=Math.floor(Math.random()*50);
+
+document.getElementById("packetCount").innerText=packets;
+
+},800);
+
+
+/* COMMAND TERMINAL */
+
+let cmd=document.getElementById("command");
+
+cmd.addEventListener("keypress",function(e){
+
+if(e.key==="Enter"){
+
+let c=cmd.value;
+
+log(c);
+
+if(c==="help"){
+log("commands: scan, ip, clear")
+}
+
+else if(c==="scan"){
+log("Scanning device...")
+}
+
+else if(c==="ip"){
+log("IP: 192.168."+Math.floor(Math.random()*200))
+}
+
+else if(c==="clear"){
+terminal.innerHTML=""
+}
+
+else{
+log("command not found")
+}
+
+cmd.value="";
+
+}
+
+});
 
 
 /* PROGRESS BAR */
@@ -251,20 +326,12 @@ if(progress>=100){
 clearInterval(interval);
 
 document.body.classList.add("flash");
-document.body.classList.add("shake");
 
+document.getElementById("skull").style.display="block";
 document.getElementById("warning").style.display="block";
 
-document.getElementById("alarm").play();
-
-if(navigator.vibrate){
-navigator.vibrate([300,200,300,200,500]);
-}
-
 setTimeout(function(){
-
 document.getElementById("lesson").style.display="block";
-
 },4000);
 
 }
