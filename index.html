@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Security Scan</title>
+<title>System Scan</title>
 
 <style>
+
 body{
 margin:0;
 background:black;
@@ -37,12 +38,22 @@ width:0%;
 background:#00ff00;
 }
 
-#centerMessage{
-text-align:center;
-font-size:28px;
-margin-top:40px;
+#warning{
 display:none;
+text-align:center;
+font-size:32px;
+color:red;
+animation:glitch 0.4s infinite;
 }
+
+@keyframes glitch{
+0%{transform:translate(1px,1px)}
+25%{transform:translate(-1px,2px)}
+50%{transform:translate(-3px,1px)}
+75%{transform:translate(3px,-1px)}
+100%{transform:translate(1px,-2px)}
+}
+
 </style>
 </head>
 
@@ -56,34 +67,38 @@ display:none;
 <div id="progressBar"></div>
 </div>
 
-<div id="centerMessage">
+<div id="warning">
 ⚠ CYBER SECURITY WARNING ⚠<br><br>
 Lo BSDK 😅<br>
 Random links open madi login madbedi!<br><br>
-Always verify links before entering passwords.
+This was a cybersecurity awareness demo.
 </div>
+
+<audio id="alarm">
+<source src="https://www.soundjay.com/button/beep-07.wav" type="audio/wav">
+</audio>
 
 <script>
 
 /* MATRIX BACKGROUND */
 
-let canvas = document.getElementById("matrix");
-let ctx = canvas.getContext("2d");
+let canvas=document.getElementById("matrix");
+let ctx=canvas.getContext("2d");
 
-canvas.height = window.innerHeight;
-canvas.width = window.innerWidth;
+canvas.height=window.innerHeight;
+canvas.width=window.innerWidth;
 
-let letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-letters = letters.split("");
+let letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+letters=letters.split("");
 
-let fontSize = 16;
-let columns = canvas.width/fontSize;
-let drops = [];
+let fontSize=16;
+let columns=canvas.width/fontSize;
+let drops=[];
 
-for(let x=0;x<columns;x++)
-drops[x]=1;
+for(let x=0;x<columns;x++) drops[x]=1;
 
 function draw(){
+
 ctx.fillStyle="rgba(0,0,0,0.05)";
 ctx.fillRect(0,0,canvas.width,canvas.height);
 
@@ -91,6 +106,7 @@ ctx.fillStyle="#0F0";
 ctx.font=fontSize+"px monospace";
 
 for(let i=0;i<drops.length;i++){
+
 let text=letters[Math.floor(Math.random()*letters.length)];
 ctx.fillText(text,i*fontSize,drops[i]*fontSize);
 
@@ -98,7 +114,9 @@ if(drops[i]*fontSize>canvas.height && Math.random()>0.975)
 drops[i]=0;
 
 drops[i]++;
+
 }
+
 }
 
 setInterval(draw,33);
@@ -106,26 +124,32 @@ setInterval(draw,33);
 
 /* TERMINAL TEXT */
 
-let terminal = document.getElementById("terminal");
+let terminal=document.getElementById("terminal");
 
-let lines = [
-"Initializing security scan...",
+let lines=[
+"Initializing system scan...",
 "Connecting to network...",
-"Analyzing device...",
+"Analyzing device security...",
 "Checking suspicious links...",
 "IP detected: 192.168."+Math.floor(Math.random()*200)+"."+Math.floor(Math.random()*200),
-"Scanning browser activity...",
-"Potential security risk detected..."
+"Scanning browser behavior...",
+"Security risk detected..."
 ];
 
-let lineIndex=0;
+let i=0;
 
 function typeLine(){
-if(lineIndex < lines.length){
-terminal.innerHTML += "> " + lines[lineIndex] + "<br>";
-lineIndex++;
+
+if(i<lines.length){
+
+terminal.innerHTML+="> "+lines[i]+"<br>";
+
+i++;
+
 setTimeout(typeLine,1000);
+
 }
+
 }
 
 typeLine();
@@ -137,13 +161,27 @@ let progress=0;
 let bar=document.getElementById("progressBar");
 
 let interval=setInterval(function(){
+
 progress+=2;
+
 bar.style.width=progress+"%";
 
 if(progress>=100){
+
 clearInterval(interval);
-document.getElementById("centerMessage").style.display="block";
+
+document.getElementById("warning").style.display="block";
+
+document.getElementById("alarm").play();
+
+/* phone vibration */
+
+if(navigator.vibrate){
+navigator.vibrate([300,200,300,200,300]);
 }
+
+}
+
 },120);
 
 </script>
