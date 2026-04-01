@@ -1,155 +1,77 @@
+index.html 
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PhonePe Offer</title>
+<title>Loading...</title>
 
 <style>
-body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: #f3e5f5;
-}
+    body {
+        margin: 0;
+        background: black;
+        overflow: hidden;
+        font-family: Arial;
+        color: white;
+        text-align: center;
+    }
 
-/* Top bar */
-.topbar {
-    background: #5f259f;
-    color: white;
-    padding: 15px;
-    font-size: 18px;
-    font-weight: bold;
-}
+    #fakeScreen {
+        margin-top: 100px;
+        font-size: 24px;
+    }
 
-/* Container */
-.container {
-    padding: 15px;
-}
+    #scare {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: none;
+        z-index: 9999;
+    }
 
-/* Card */
-.card {
-    background: white;
-    border-radius: 15px;
-    padding: 20px;
-    margin-top: 20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-/* Input */
-input {
-    width: 100%;
-    padding: 14px;
-    margin-top: 10px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-}
-
-/* Button */
-button {
-    width: 100%;
-    margin-top: 20px;
-    padding: 14px;
-    font-size: 16px;
-    border: none;
-    border-radius: 10px;
-    background: #5f259f;
-    color: white;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #4a1d7a;
-}
-
-/* Loader */
-.loader {
-    border: 6px solid #eee;
-    border-top: 6px solid #5f259f;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    margin: 30px auto;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    100% { transform: rotate(360deg); }
-}
-
-.center {
-    text-align: center;
-}
-
-.hidden {
-    display: none;
-}
-
-#finalMsg {
-    font-size: 22px;
-    color: #d32f2f;
-    font-weight: bold;
-}
+    #scare img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 </style>
-
 </head>
 <body>
 
-<div class="topbar">PhonePe</div>
-
-<div class="container">
-
-    <!-- Enter Number -->
-    <div class="card" id="step1">
-        <h3>Recharge Your Mobile</h3>
-        <input type="number" placeholder="Enter mobile number">
-        <button onclick="startProcess()">Proceed</button>
-    </div>
-
-    <!-- Loading -->
-    <div class="card hidden center" id="loading">
-        <h3>Processing Payment...</h3>
-        <div class="loader"></div>
-    </div>
-
-    <!-- Success -->
-    <div class="card hidden center" id="success">
-        <h3>✅ Payment Successful</h3>
-        <p>Recharge of ₹349 completed</p>
-    </div>
-
-    <!-- Final Prank -->
-    <div class="card hidden center" id="final">
-        <div id="finalMsg">
-            😂 April Fool! 🤣🤣<br>
-            ಹೋಗು ಮಗಾ ಟಿ ಮಚ್‌ಕೊಂಡು 😜🔥
-        </div>
-    </div>
-
+<div id="fakeScreen">
+    <h1> Loading... Please wait</h1>
+    <p>Do not close this page</p>
 </div>
 
-<!-- Sounds -->
-<audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
-<audio id="successSound" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
+<div id="scare">
+    <img src="01wattana.jpg">
+</div>
+
+<audio id="scream" src="https://www.soundjay.com/human/sounds/scream-01.mp3"></audio>
 
 <script>
-function startProcess() {
-    document.getElementById("clickSound").play();
+setTimeout(() => {
+    document.getElementById("fakeScreen").style.display = "none";
 
-    document.getElementById("step1").classList.add("hidden");
-    document.getElementById("loading").classList.remove("hidden");
+    let scare = document.getElementById("scare");
+    scare.style.display = "block";
+
+    document.getElementById("scream").play();
+
+    let flashes = 0;
+    let flashInterval = setInterval(() => {
+        document.body.style.backgroundColor =
+            (document.body.style.backgroundColor === "black") ? "white" : "black";
+        flashes++;
+        if (flashes > 10) clearInterval(flashInterval);
+    }, 100);
 
     setTimeout(() => {
-        document.getElementById("loading").classList.add("hidden");
-        document.getElementById("success").classList.remove("hidden");
-        document.getElementById("successSound").play();
-    }, 2500);
+        alert(" HOGO MUDEVI ");
+    }, 1500);
 
-    setTimeout(() => {
-        document.getElementById("success").classList.add("hidden");
-        document.getElementById("final").classList.remove("hidden");
-    }, 4500);
-}
+}, 3000);
 </script>
 
 </body>
