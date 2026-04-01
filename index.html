@@ -1,343 +1,155 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Cyber Security Scan</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhonePe Offer</title>
 
 <style>
-
-body{
-margin:0;
-background:black;
-color:#00ff00;
-font-family:monospace;
-overflow:hidden;
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f3e5f5;
 }
 
-canvas{
-position:fixed;
-top:0;
-left:0;
-z-index:-2;
+/* Top bar */
+.topbar {
+    background: #5f259f;
+    color: white;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: bold;
 }
 
-#grid{
-position:fixed;
-width:100%;
-height:100%;
-background-image:
-linear-gradient(rgba(0,255,0,0.1) 1px, transparent 1px),
-linear-gradient(90deg, rgba(0,255,0,0.1) 1px, transparent 1px);
-background-size:40px 40px;
-z-index:-1;
+/* Container */
+.container {
+    padding: 15px;
 }
 
-#terminal{
-padding:20px;
-font-size:17px;
-max-height:60vh;
-overflow:auto;
+/* Card */
+.card {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-#command{
-background:black;
-color:#00ff00;
-border:none;
-font-family:monospace;
-font-size:17px;
-outline:none;
+/* Input */
+input {
+    width: 100%;
+    padding: 14px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 16px;
 }
 
-#globe{
-position:fixed;
-right:20px;
-top:20px;
-font-size:80px;
-animation:spin 6s linear infinite;
+/* Button */
+button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 14px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    background: #5f259f;
+    color: white;
+    cursor: pointer;
 }
 
-@keyframes spin{
-from{transform:rotate(0deg)}
-to{transform:rotate(360deg)}
+button:hover {
+    background: #4a1d7a;
 }
 
-#packets{
-position:fixed;
-right:20px;
-top:120px;
-font-size:16px;
+/* Loader */
+.loader {
+    border: 6px solid #eee;
+    border-top: 6px solid #5f259f;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    margin: 30px auto;
+    animation: spin 1s linear infinite;
 }
 
-#progressBox{
-width:80%;
-margin:20px auto;
-border:2px solid #00ff00;
-height:25px;
+@keyframes spin {
+    100% { transform: rotate(360deg); }
 }
 
-#progressBar{
-height:100%;
-width:0%;
-background:#00ff00;
+.center {
+    text-align: center;
 }
 
-#warning{
-display:none;
-text-align:center;
-font-size:32px;
-color:red;
-margin-top:20px;
+.hidden {
+    display: none;
 }
 
-#lesson{
-display:none;
-text-align:center;
-font-size:24px;
-color:white;
-margin-top:20px;
+#finalMsg {
+    font-size: 22px;
+    color: #d32f2f;
+    font-weight: bold;
 }
-
-#skull{
-display:none;
-text-align:center;
-font-size:90px;
-animation:pulse 1s infinite;
-}
-
-@keyframes pulse{
-0%{transform:scale(1)}
-50%{transform:scale(1.2)}
-100%{transform:scale(1)}
-}
-
-.flash{
-animation:flash 0.3s 6;
-}
-
-@keyframes flash{
-0%{background:black}
-50%{background:red}
-100%{background:black}
-}
-
 </style>
-</head>
 
+</head>
 <body>
 
-<div id="grid"></div>
+<div class="topbar">PhonePe</div>
 
-<canvas id="matrix"></canvas>
+<div class="container">
 
-<div id="globe">🌍</div>
+    <!-- Enter Number -->
+    <div class="card" id="step1">
+        <h3>Recharge Your Mobile</h3>
+        <input type="number" placeholder="Enter mobile number">
+        <button onclick="startProcess()">Proceed</button>
+    </div>
 
-<div id="packets">
-Packets: <span id="packetCount">0</span>
+    <!-- Loading -->
+    <div class="card hidden center" id="loading">
+        <h3>Processing Payment...</h3>
+        <div class="loader"></div>
+    </div>
+
+    <!-- Success -->
+    <div class="card hidden center" id="success">
+        <h3>✅ Payment Successful</h3>
+        <p>Recharge of ₹349 completed</p>
+    </div>
+
+    <!-- Final Prank -->
+    <div class="card hidden center" id="final">
+        <div id="finalMsg">
+            😂 April Fool AMITH R! 🤣🤣<br>
+            Hogo BSDK 😜🔥
+        </div>
+    </div>
+
 </div>
 
-<div id="terminal"></div>
-
-<div style="padding:20px">
-> <input id="command" placeholder="type command...">
-</div>
-
-<div id="progressBox">
-<div id="progressBar"></div>
-</div>
-
-<div id="skull">☠</div>
-
-<div id="warning">⚠ SECURITY BREACH DETECTED ⚠</div>
-
-<div id="lesson">
-😅 Relax!<br><br>
-This was a cybersecurity awareness demo.<br>
-Never open unknown links.
-</div>
+<!-- Sounds -->
+<audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
+<audio id="successSound" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
 
 <script>
+function startProcess() {
+    document.getElementById("clickSound").play();
 
-/* MATRIX RAIN */
+    document.getElementById("step1").classList.add("hidden");
+    document.getElementById("loading").classList.remove("hidden");
 
-let canvas=document.getElementById("matrix");
-let ctx=canvas.getContext("2d");
+    setTimeout(() => {
+        document.getElementById("loading").classList.add("hidden");
+        document.getElementById("success").classList.remove("hidden");
+        document.getElementById("successSound").play();
+    }, 2500);
 
-canvas.height=window.innerHeight;
-canvas.width=window.innerWidth;
-
-let letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-letters=letters.split("");
-
-let fontSize=16;
-let columns=canvas.width/fontSize;
-let drops=[];
-
-for(let x=0;x<columns;x++) drops[x]=1;
-
-function draw(){
-
-ctx.fillStyle="rgba(0,0,0,0.05)";
-ctx.fillRect(0,0,canvas.width,canvas.height);
-
-ctx.fillStyle="#0F0";
-ctx.font=fontSize+"px monospace";
-
-for(let i=0;i<drops.length;i++){
-
-let text=letters[Math.floor(Math.random()*letters.length)];
-ctx.fillText(text,i*fontSize,drops[i]*fontSize);
-
-if(drops[i]*fontSize>canvas.height && Math.random()>0.975)
-drops[i]=0;
-
-drops[i]++;
-
+    setTimeout(() => {
+        document.getElementById("success").classList.add("hidden");
+        document.getElementById("final").classList.remove("hidden");
+    }, 4500);
 }
-
-}
-
-setInterval(draw,33);
-
-
-/* TERMINAL */
-
-let terminal=document.getElementById("terminal");
-
-function log(text){
-terminal.innerHTML+="<br>> "+text;
-terminal.scrollTop=terminal.scrollHeight;
-}
-
-let boot=[
-
-"Initializing cyber scan...",
-"Connecting to node...",
-"Detecting IP...",
-"IP: 192.168."+Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255),
-"Scanning network ports...",
-"Accessing system modules...",
-"Injecting scanner...",
-"Starting password brute force..."
-
-];
-
-let i=0;
-
-function bootSeq(){
-
-if(i<boot.length){
-
-log(boot[i]);
-i++;
-
-setTimeout(bootSeq,900);
-
-}
-
-}
-
-bootSeq();
-
-
-/* PASSWORD CRACK */
-
-let crack=0;
-
-function crackPass(){
-
-if(crack<100){
-
-log("Cracking password "+crack+"%");
-crack+=10;
-
-setTimeout(crackPass,600);
-
-}
-
-}
-
-setTimeout(crackPass,6000);
-
-
-/* NETWORK PACKETS */
-
-let packets=0;
-
-setInterval(function(){
-
-packets+=Math.floor(Math.random()*50);
-
-document.getElementById("packetCount").innerText=packets;
-
-},800);
-
-
-/* COMMAND TERMINAL */
-
-let cmd=document.getElementById("command");
-
-cmd.addEventListener("keypress",function(e){
-
-if(e.key==="Enter"){
-
-let c=cmd.value;
-
-log(c);
-
-if(c==="help"){
-log("commands: scan, ip, clear")
-}
-
-else if(c==="scan"){
-log("Scanning device...")
-}
-
-else if(c==="ip"){
-log("IP: 192.168."+Math.floor(Math.random()*200))
-}
-
-else if(c==="clear"){
-terminal.innerHTML=""
-}
-
-else{
-log("command not found")
-}
-
-cmd.value="";
-
-}
-
-});
-
-
-/* PROGRESS BAR */
-
-let progress=0;
-let bar=document.getElementById("progressBar");
-
-let interval=setInterval(function(){
-
-progress+=2;
-
-bar.style.width=progress+"%";
-
-if(progress>=100){
-
-clearInterval(interval);
-
-document.body.classList.add("flash");
-
-document.getElementById("skull").style.display="block";
-document.getElementById("warning").style.display="block";
-
-setTimeout(function(){
-document.getElementById("lesson").style.display="block";
-},4000);
-
-}
-
-},120);
-
 </script>
 
 </body>
